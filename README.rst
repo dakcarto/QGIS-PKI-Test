@@ -19,19 +19,19 @@ community docs for info on `Configuring X.509 Certificate Authentication`_.
 Configure GeoServer before continuing.
 
 .. note:: This test app *will* work with other PKI backends. You will have to
-   configure them, then edit `webpage.cpp` in the test app's source tree, before
-   building, and customize the `*.pem` file names relative to your Certificate
+   configure them, then edit ``webpage.cpp`` in the test app's source tree, before
+   building, and customize the ``*.pem`` file names relative to your Certificate
    Authority and client cert/key. Then, when testing in the app, just paste in
    your URL and hit return/enter.
 
 Create test folder structure
 ............................
 
-Create a project folder for testing PKI, e.g. named `PKI-Test`::
+Create a project folder for testing PKI, e.g. named ``PKI-Test``::
 
   $ cd ~ && mkdir "PKI-Test" && cd "PKI-Test"
 
-Inside the `PKI-Test` the following folders::
+Inside the ``PKI-Test`` the following folders::
 
   $ mkdir PKI QGIS-PKI-Test-build
 
@@ -47,7 +47,7 @@ password for all commands is *password*)::
   $ openssl pkcs12 -in rod.p12 -clcerts -nokeys -out rod_cert.pem
   $ openssl pkcs12 -in rod.p12 -nocerts -nodes -out rod_key.pem
 
-.. note:: Since I am testing on a Mac, I also converted the `ca.pem` certificate
+.. note:: Since I am testing on a Mac, I also converted the ``ca.pem`` certificate
    authority file and changed the line endings from Windows (CRLF) to Unix (LF).
    However, the test app (i.e. underlying QtNetwork module) appears to handle
    the X.509 components with either line ending formats::
@@ -76,7 +76,7 @@ The resultant modulus for both files should match, and probably looks like::
   31C4C15AD09079F5AC73B038E63D993B4A3D6D3FBA1EA44515011C7273A2F7385302D392DC3A1C
   084D54947105C43C8332150B06D573
 
-Use `openssl` test client to access GeoServer
+Use ``openssl`` test client to access GeoServer
 .............................................
 
 ::
@@ -134,7 +134,7 @@ Clone source code from github.com::
 
 This will create a folder named 'QGIS-PKI-Test' with the source code in it.
 
-.. note:: If you are not using `git`, you can download the source code and
+.. note:: If you are not using ``git``, you can download the source code and
    expand it archive. Once decompressed, change the name of the archive to
    'QGIS-PKI-Test', e.g.::
 
@@ -153,9 +153,9 @@ CMake supports out-of-source directory building::
   $ cmake ../QGIS-PKI-Test
   $ make
 
-This should result in a binary app named `QGIS-PKI-Test`.
+This should result in a binary app named ``QGIS-PKI-Test``.
 
-Run the `QGIS-PKI-Test` app::
+Run the ``QGIS-PKI-Test`` app::
 
   $ cd ~/PKI-Test/QGIS-PKI-Test-build
   $ ./QGIS-PKI-Test
@@ -174,18 +174,18 @@ Some notes concerning test app and integration
   with the OpenSSL cert/key stores, i.e. no direct access to the underlying
   platform-native store on Windows or Mac.
 
-- The `ca.pem` file is necessary to add to the SSL configuration, otherwise the
+- The ``ca.pem`` file is necessary to add to the SSL configuration, otherwise the
   trust chain can not be built. This should be a global app option in QGIS.
 
-- The `QSslError::SelfSignedCertificate` error has been added as a default
-  expected SSL error, since in the case of GeoServer's `ca.pem` the CA is
+- The ``QSslError::SelfSignedCertificate`` error has been added as a default
+  expected SSL error, since in the case of GeoServer's ``ca.pem`` the CA is
   self-signed. This should probably be a default expected SSL error in QGIS as
   well.
 
-- The `QWebView` (from Qt 4.8.6) used in this example did not forward the client
+- The ``QWebView`` (from Qt 4.8.6) used in this example did not forward the client
   cert/key on to the peer during SSL handshake, when using its embedded
-  `QNetworkAccessManager`. The manager was used to separately access the content
-  and then load the result into the `QWebView`. This may result in some web
+  ``QNetworkAccessManager``. The manager was used to separately access the content
+  and then load the result into the ``QWebView``. This may result in some web
   pages not loading completely and possibly lead to crashes unrelated to the
   actual PKI testing.
 
@@ -194,7 +194,7 @@ Some notes concerning test app and integration
 
 - This test app does not support multi-threaded Web browsing, i.e. the app's GUI
   will occasionally freeze when accessing pages, until all of their components
-  are downloaded and ready to display. This is a limitation of Qt's `QWebView`
+  are downloaded and ready to display. This is a limitation of Qt's ``QWebView``
   widget, when used in a basic GUI layout, and (probably) *not* a reflection
   upon the backend's responsiveness.
 
