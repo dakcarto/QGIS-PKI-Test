@@ -26,7 +26,6 @@ class WebPage : public QDialog, private Ui::WebPage
     void setLocation( const QUrl& url );
     void loadUrl( const QString& url = QString() );
     void loadUrl( const QUrl& url );
-    void setWebViewHTML( const QString& html );
     void loadReply();
     void clearWebView();
     void clearLog();
@@ -37,6 +36,7 @@ class WebPage : public QDialog, private Ui::WebPage
     QSslCertificate clientCert();
     QSslKey clientKey();
     QList<QSslError> expectedSslErrors();
+    QString pkiDir();
 
     QNetworkAccessManager *mNaMan;
     QNetworkReply *mReply;

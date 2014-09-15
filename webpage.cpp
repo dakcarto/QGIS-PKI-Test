@@ -1,6 +1,7 @@
 #include "webpage.h"
 #include "ui_webpage.h"
 
+#include <QDir>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -24,13 +25,10 @@ WebPage::WebPage( QWidget *parent ) :
   urlList << "http://localhost"
           << QString( "http://localhost:8080" )
           << QString( "https://localhost:8443" )
-          << QString( "https://localhost:8443/geoserver" )
           << QString( "http://www.google.com" )
           << QString( "https://localhost:8443/geoserver/opengeo/wms?service=WMS&version=1.1.0"
                       "&request=GetMap&layers=opengeo:countries&styles=&bbox=-180.0,-90.0,180.0,90.0"
-                      "&width=800&height=400&srs=EPSG:4326&format=application/openlayers" )
-          << QString( "file:///Users/larrys/QGIS/github.com/QGIS-Documentation"
-                      "/output/docs/developer_workshop/intro_dev.html" );
+                      "&width=720&height=400&srs=EPSG:4326&format=application/openlayers" );
 
   comboBox->addItems( urlList );
 
@@ -146,7 +144,7 @@ void WebPage::loadUrl( const QUrl& url )
     req.setSslConfiguration( sslConfig );
   }
 
-  //webView->load( req ); // hey, why doesn't this work?
+  //webView->load( req ); // hey, why doesn't this work? doesn't pass ssl cert/key
 
   delete mReply;
   mReply = 0;
@@ -168,11 +166,6 @@ void WebPage::loadReply()
 void WebPage::clearWebView()
 {
   webView->setContent( 0 );
-}
-
-void WebPage::setWebViewHTML( const QString& html )
-{
-  webView->setHtml( html );
 }
 
 void WebPage::requestReply( QNetworkReply * reply )
@@ -200,16 +193,21 @@ void WebPage::onSslErrors( QNetworkReply* reply, const QList<QSslError>& errors 
   appendLog( msg );
 }
 
+QString WebPage::pkiDir()
+{
+  return QDir( qApp->applicationDirPath() + "/../PKI").absolutePath() + QDir::separator();
+}
+
 QSslCertificate WebPage::certAuth()
 {
-  QString selfSignedCert( "/Users/larrys/Boundless/PKI/sample_certs/ca-unix.pem" );
+  QString selfSignedCert( pkiDir() + "ca.pem" );
   QList<QSslCertificate> cert = QSslCertificate::fromPath( selfSignedCert );
   return cert.at( 0 );
 }
 
 QSslCertificate WebPage::clientCert()
 {
-  QFile file( "/Users/larrys/Boundless/PKI/sample_certs/rod.pem" );
+  QFile file( pkiDir() + "rod_cert.pem" );
   file.open( QIODevice::ReadOnly );
   QSslCertificate clientCert( &file );
   file.close();
@@ -218,7 +216,7 @@ QSslCertificate WebPage::clientCert()
 
 QSslKey WebPage::clientKey()
 {
-  QFile file( "/Users/larrys/Boundless/PKI/sample_certs/rod.key" );
+  QFile file( pkiDir() + "rod_key.pem" );
   file.open( QIODevice::ReadOnly );
   QSslKey clientKey( &file, QSsl::Rsa, QSsl::Pem );
   file.close();
