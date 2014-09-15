@@ -57,8 +57,8 @@ password for all commands is *password*)::
 
    *If you are testing on Windows, you do NOT need to make this change.*
 
-Copy the `ca.pem`, `rod_cert.pem` and `rod_key.pem` files to a folder
-`PKI-Test/PKI`.
+Copy the ``ca.pem``, ``rod_cert.pem`` and ``rod_key.pem`` files to the folder
+``~/PKI-Test/PKI``.
 
 Validate the conversion was successful
 ......................................
@@ -120,7 +120,7 @@ Set up and build QGIS-PKI-Test app
 Dependencies
 ............
 
-You will need at, a minimum, software for building from source code for your OS,
+You will need, at a minimum, software for building from source code for your OS,
 `CMake`_ and `Qt libraries`_. Optionally, you can install `git`_ to clone the
 source code from the repository.
 
