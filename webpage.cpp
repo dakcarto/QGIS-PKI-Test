@@ -21,6 +21,7 @@
 #include "ui_webpage.h"
 
 #include <QDir>
+#include <QInputDialog>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -134,6 +135,20 @@ void WebPage::loadUrl( const QUrl& url )
 
   if ( url.scheme().toLower() == "https" )
   {
+    bool ok;
+    QByteArray passphrase;
+    QString text = QInputDialog::getText( this, tr( "Enter Private Key Passphrase" ),
+                                          tr( "Passphrase:" ), QLineEdit::PasswordEchoOnEdit,
+                                          "", &ok );
+    if ( ok && !text.isEmpty() )
+    {
+       passphrase = text.toLatin1();
+    }
+//    else
+//    {
+//      return;
+//    }
+
     QSslConfiguration sslConfig( req.sslConfiguration() );
     //QSslConfiguration sslConfig( QSslConfiguration::defaultConfiguration() );
 
@@ -155,7 +170,7 @@ void WebPage::loadUrl( const QUrl& url )
 
     sslConfig.setLocalCertificate( cc );
 
-    QSslKey ck( clientKey() );
+    QSslKey ck( clientKey( passphrase ) );
     //appendLog( QString( "CertKey is null: %1" ).arg( ck.isNull() ? "true" : "false" ) );
 
     sslConfig.setPrivateKey( ck );
@@ -233,11 +248,11 @@ QSslCertificate WebPage::clientCert()
   return clientCert;
 }
 
-QSslKey WebPage::clientKey()
+QSslKey WebPage::clientKey( const QByteArray& passphrase )
 {
-  QFile file( pkiDir() + "rod_key.pem" );
+  QFile file( pkiDir() + "rod_key_pass.pem" );
   file.open( QIODevice::ReadOnly );
-  QSslKey clientKey( &file, QSsl::Rsa, QSsl::Pem );
+  QSslKey clientKey( &file, QSsl::Rsa, QSsl::Pem, QSsl::PrivateKey, passphrase );
   file.close();
   return clientKey;
 }

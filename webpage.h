@@ -53,7 +53,7 @@ class WebPage : public QDialog, private Ui::WebPage
     void appendLog( const QString& msg );
     QSslCertificate certAuth();
     QSslCertificate clientCert();
-    QSslKey clientKey();
+    QSslKey clientKey( const QByteArray& passphrase );
     QList<QSslError> expectedSslErrors();
     QString pkiDir();
 
