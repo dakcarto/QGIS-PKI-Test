@@ -69,7 +69,7 @@ WebPage::WebPage( QWidget *parent ) :
   connect( reloadButton, SIGNAL( clicked() ), webView, SLOT( reload() ) );
   connect( stopButton, SIGNAL( clicked() ), webView, SLOT( stop() ) );
 
-  connect( comboBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( loadUrl() ) );
+//  connect( comboBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( loadUrl() ) );
   connect( comboBox, SIGNAL( activated( const QString& ) ), this, SLOT( loadUrl( const QString& ) ) );
   connect( clearButton, SIGNAL( clicked() ), this, SLOT( clearLog() ) );
 
