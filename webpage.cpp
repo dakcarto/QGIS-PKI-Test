@@ -31,6 +31,8 @@
 #include <QSslError>
 #include <QSslKey>
 
+#include <QtCrypto>
+
 WebPage::WebPage( QWidget *parent ) :
   QDialog( parent ),
   mNaMan( 0 ),

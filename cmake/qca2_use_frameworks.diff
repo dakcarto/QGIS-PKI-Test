@@ -1,0 +1,43 @@
+Index: FindQCA2.cmake
+===================================================================
+--- FindQCA2.cmake	(revision 834467)
++++ FindQCA2.cmake	(working copy)
+@@ -24,8 +24,19 @@
+ else (QCA2_INCLUDE_DIR AND QCA2_LIBRARIES)
+ 
+   INCLUDE(UsePkgConfig)
++  INCLUDE(CMakeFindFrameworks)
++  
++  IF (APPLE)
++    CMAKE_FIND_FRAMEWORKS(qca)
++    if (qca_FRAMEWORKS)
++       set(QCA2_LIBRARIES "-framework qca -L${qca_FRAMEWORKS}" CACHE FILEPATH "QCA framework" FORCE)
++       set(QCA2_INCLUDE_DIR "${qca_FRAMEWORKS}/Headers" CACHE FILEPATH "QCA framework headers" FORCE)
++       set(QCA2_FOUND TRUE)
++    endif (qca_FRAMEWORKS)
++  ENDIF(APPLE)
++  
++  IF (NOT WIN32 AND NOT QCA2_FOUND)
+ 
+-  IF (NOT WIN32)
+     PKGCONFIG(qca2 QCA2_INCLUDE_DIR _Qca2LinkDir _Qca2LinkFlags _Qca2Cflags)
+ 
+     set(QCA2_DEFINITIONS ${_Qca2Cflags})
+@@ -35,7 +46,7 @@
+       ${_Qca2LinkDir}
+       NO_DEFAULT_PATH
+     )
+-  ELSE (NOT WIN32)
++  ELSE (NOT WIN32 AND NOT QCA2_FOUND)
+     FIND_LIBRARY_WITH_DEBUG(QCA2_LIBRARIES
+                     WIN32_DEBUG_POSTFIX d
+                     NAMES qca)
+@@ -44,7 +55,7 @@
+     IF(QCA2_INCLUDE_DIR_tmp)
+       SET(QCA2_INCLUDE_DIR ${QCA2_INCLUDE_DIR_tmp}/QtCrypto CACHE TYPE PATH FORCE)
+     ENDIF(QCA2_INCLUDE_DIR_tmp)
+-  ENDIF (NOT WIN32)
++  ENDIF (NOT WIN32 AND NOT QCA2_FOUND)
+ 
+ 
+   if (QCA2_INCLUDE_DIR AND QCA2_LIBRARIES)
